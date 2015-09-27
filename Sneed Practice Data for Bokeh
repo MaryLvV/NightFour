@@ -1,0 +1,168 @@
+
+Cell Toolbar:
+In [1]:
+
+# Import section
+
+import os
+
+import numpy as np
+
+import pandas as pd
+
+import bokeh
+
+​
+
+# Read in the health data
+
+chris = pd.read_csv ('C:\Users\W540\Jupyter\state.csv')
+
+grouped = chris.groupby(['State'])
+
+value1 = chris['Value'].astype(float)
+
+chris.loc[:,'value1'] = value1
+
+value2 = chris['value1'].astype('int')
+
+chris.loc[:,'value2'] = value2
+
+In [2]:
+
+chris
+
+Out[2]:
+	State 	Value 	value1 	value2
+0 	ks 	10 	10 	10
+1 	ks 	20 	20 	20
+2 	ks 	30 	30 	30
+3 	tn 	10 	10 	10
+4 	tn 	15 	15 	15
+5 	tn 	25 	25 	25
+In [3]:
+
+chris.to_csv('C:\Users\W540\Jupyter\state.csv')
+
+In [4]:
+
+frank = pd.read_csv('C:\Users\W540\Jupyter\state.csv')
+
+In [5]:
+
+frank
+
+Out[5]:
+	Unnamed: 0 	State 	Value 	value1 	value2
+0 	0 	ks 	10 	10 	10
+1 	1 	ks 	20 	20 	20
+2 	2 	ks 	30 	30 	30
+3 	3 	tn 	10 	10 	10
+4 	4 	tn 	15 	15 	15
+5 	5 	tn 	25 	25 	25
+In [6]:
+
+chris = pd.read_csv ('C:\Users\W540\Jupyter\state.csv')
+
+​
+
+In [7]:
+
+chris
+
+Out[7]:
+	Unnamed: 0 	State 	Value 	value1 	value2
+0 	0 	ks 	10 	10 	10
+1 	1 	ks 	20 	20 	20
+2 	2 	ks 	30 	30 	30
+3 	3 	tn 	10 	10 	10
+4 	4 	tn 	15 	15 	15
+5 	5 	tn 	25 	25 	25
+In [8]:
+
+from collections import OrderedDict
+
+from bokeh.sampledata import us_states
+
+from bokeh.plotting import figure, show, output_file, output_notebook, ColumnDataSource
+
+from bokeh.models import HoverTool
+
+​
+
+us_states = us_states.data.copy()
+
+​
+
+del us_states["HI"]
+
+del us_states["AK"]
+
+​
+
+state_xs = [us_states[code]["lons"] for code in us_states]
+
+state_ys = [us_states[code]["lats"] for code in us_states]
+
+​
+
+colors = ["#F1EEF6", "#D4B9DA", "#C994C7", "#DF65B0", "#DD1C77", "#980043"]
+
+In [9]:
+
+state_colors = []
+
+for value2 in chris:
+
+    if us_states in ["ak", "hi", "pr", "gu", "vi", "mp", "as"]:
+
+        continue
+
+    try:
+
+        rate = chris[value2]
+
+        idx = min(int(rate/2), 5)
+
+        state_colors.append(colors[idx])
+
+    except KeyError:
+
+        state_colors.append("black")
+
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-9-688cb2053dca> in <module>()
+      5     try:
+      6         rate = chris[value2]
+----> 7         idx = min(int(rate/2), 5)
+      8         state_colors.append(colors[idx])
+      9     except KeyError:
+
+C:\Users\W540\Anaconda\lib\site-packages\pandas\core\series.pyc in wrapper(self)
+     75             return converter(self.iloc[0])
+     76         raise TypeError(
+---> 77             "cannot convert the series to {0}".format(str(converter)))
+     78     return wrapper
+     79 
+
+TypeError: cannot convert the series to <type 'int'>
+
+In [10]:
+
+chris[value2]
+
+Out[10]:
+
+0    0
+1    1
+2    2
+3    3
+4    4
+5    5
+Name: Unnamed: 0, dtype: int64
+
+In [ ]:
+
+​
+
