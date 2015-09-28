@@ -1,1 +1,119 @@
-TEST
+# Urvish Bhagat
+
+
+# Import section
+import os
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+
+# Read in the health data
+govdata = pd.read_csv ('/users/khaji123/desktop/
+Inpatient_Prospective_Payment_System__
+IPPS__Provider_Summary_for_the_Top_100_
+Diagnosis-Related_Groups__DRG__-_
+FY2011 (1).csv')
+
+# Assign each column to a new data column without the $
+acc = govdata[' Average Covered Charges '].str.lstrip('$')
+atp = govdata[' Average Total Payments '].str.lstrip('$')
+amp = govdata['Average Medicare Payments'].str.lstrip('$')
+
+
+# Change the data type from oject to float so that it is numeric
+# Assign to another new variable so the new data type "sticks"
+accnum = acc.astype(float)
+atpnum = atp.astype(float)
+ampnum = amp.astype(float)
+
+#update govdata table
+
+govdata.update (accnum)
+govdata.update (atpnum)
+govdata.update (ampnum)
+
+#Mean, Mode, Std. Dev for last 3 columns
+accmean = accnum.mean()
+accmode = accnum.mode()
+accstd = accnum.std()
+
+atpmean = atpnum.mean()
+
+atpmode = atpnum.mode()
+atpstd = atpnum.std()
+
+ampmean = ampnum.mean()
+ampmode = ampnum.mode()
+ampstd = ampnum.std()
+
+#print
+govdata
+
+print "Mean of Average Covered Charges"
+print accmean
+print "Mode of Average Covered Charges"
+print accmode
+print "STD of Average Covered Charges"
+print accstd
+
+print "Mean of Average Total Payments"
+print atpmean
+print "Mode of Average Total Payments"
+print atpmode
+print "STD of Average Total Payments"
+print atpstd
+
+print "Mean of Average Medical Payments"
+print ampmean
+print "Mode of Average Medical Payments"
+print ampmode
+print "STD of Average Medical Payments"
+print ampstd
+
+
+
+Once the information was organized graph summary statistics were produced for each individual column. Below are the codes that were inputted through python and the graphs that were outputted with numerical representations. 
+# prepare some data
+data = {"y": [8494.49096403,3744.00, 7309.46726062]}
+
+# output to static HTML file
+output_file("bar.html")
+
+# create a new line chat with a title and axis labels
+p = Bar(data, cat=['Mean','Mode', 'STD'], title="Average Medical Payments",
+        xlabel='categories', ylabel='values', width=400, height=400)
+
+# show the results
+show(p)
+
+
+ 
+
+
+# prepare some data
+data = {"y": [36133.9542244, 31155, 35065.3659313]}
+
+# output to static HTML file
+output_file("bar.html")
+
+# create a new line chat with a title and axis labels
+p = Bar(data, cat=['Mean','Mode', 'STD'], title="Average Coverage Charge",
+        xlabel='categories', ylabel='values', width=400, height=400)
+
+# show the results
+show(p)
+
+
+ 
+# prepare some data
+data = {"y": [9707.47380419, 4370, 7664.64259815]}
+
+# output to static HTML file
+output_file("bar.html")
+
+# create a new line chat with a title and axis labels
+p = Bar(data, cat=['Mean','Mode', 'STD'], title="Average Total Payments",
+        xlabel='categories', ylabel='values', width=400, height=400)
+
+# show the results
+show(p)
