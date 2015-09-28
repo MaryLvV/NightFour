@@ -6,6 +6,8 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib as mpl
+from collections import OrderedDict
+from bokeh.charts import Dot, output_file, show
 
 # Read in the health data
 govdata = pd.read_csv ('/users/khaji123/desktop/
@@ -74,17 +76,17 @@ print ampstd
 
 Once the information was organized graph summary statistics were produced for each individual column. Below are the codes that were inputted through python and the graphs that were outputted with numerical representations. 
 # prepare some data
-data = {"y": [8494.49096403,3744.00, 7309.46726062]}
 
-# output to static HTML file
-output_file("bar.html")
 
-# create a new line chat with a title and axis labels
-p = Bar(data, cat=['Mean','Mode', 'STD'], title="Average Medical Payments",
-        xlabel='categories', ylabel='values', width=400, height=400)
+# dict, OrderedDict, lists, arrays and DataFrames are valid inputs
+xyvalues = OrderedDict()
+xyvalues['mean']=[accmean, atpmean, ampmean]
+#xyvalues['Mode']=[accmode, atpmode, ampmode]
+xyvalues['Std']=[accstd, atpstd, ampstd]
+dot = Dot(xyvalues, ['Covered Charges', 'Total Payment', 'Medical Payment'], title='dots')
 
-# show the results
-show(p)
+output_file('dot.html')
+show(dot)
 
 
  
