@@ -1,0 +1,158 @@
+chgmst = pd.read_csv('/users/Crystal/Desktop/CMSDATAAGAIN.csv')
+
+ 
+
+format = lambda x: (str(x).strip('$'))
+
+chgmst_file = chgmst.applymap(format)
+
+ 
+
+chgmst_file[' Average Covered Charges '] = chgmst_file[' Average Covered Charges '].astype(float)
+
+chgmst_file[' Average Total Payments '] = chgmst_file[' Average Total Payments '].astype(float)
+
+chgmst_file['Average Medicare Payments'] = chgmst_file['Average Medicare Payments'].astype(float)
+
+ 
+
+chgmst_df = pd.DataFrame(chgmst_file)
+
+grouped_df = chgmst_df.groupby(['Provider State'])
+
+functions = ['mean', 'median', 'std']
+
+output = grouped_df.agg(functions)
+
+ 
+
+output
+
+cost = output[' Average Covered Charges ']
+
+output
+
+State_sum = cost.ix[:, 1]
+
+State_sum
+
+###This part gives you the graphs###
+
+from collections import OrderedDict
+
+from bokeh.charts import Dot, output_file, show
+
+ 
+
+# dict, OrderedDict, lists, arrays and DataFrames are valid inputs
+
+xyvalues = OrderedDict()
+
+xyvalues['mean']=[accmean, atpmean, ampmean]
+
+#xyvalues['Mode']=[accmode, atpmode, ampmode]
+
+xyvalues['Std']=[accstd, atpstd, ampstd]
+
+dot = Dot(xyvalues, ['Covered Charges', 'Total Payment', 'Medical Payment'], title='dots')
+
+ 
+
+output_file('dot.html')
+
+show(dot)
+
+ 
+
+from bokeh.sampledata import us_states
+
+from bokeh.plotting import *
+
+ 
+
+us_states = us_states.data.copy()
+
+ 
+
+del us_states["HI"]
+
+del us_states["AK"]
+
+del us_states["DC"]
+
+ 
+
+state_xs = [us_states[code]["lons"] for code in us_states]
+
+state_ys = [us_states[code]["lats"] for code in us_states]
+
+ 
+
+colors = ["white", "#0000FF", "#DC143C", "#8B0000", "#9932CC", "#BDB76B"]
+
+ 
+
+state_colors = []
+
+for code in us_states:
+
+    try:
+
+        cost = round(mean_charges.get_value(code))
+
+        if cost <= 10000:
+
+            idx = 0
+
+        elif 10000 < cost <= 20000:
+
+            idx = 1
+
+        elif 20000 < cost <= 30000:
+
+            idx = 2
+
+        elif 30000 < cost <= 40000:
+
+            idx = 3
+
+        elif 40000 < cost <= 60000:
+
+            idx = 4
+
+        else:
+
+            idx = 5
+
+            
+
+        state_colors.append(colors[idx])
+
+    except:
+
+        state_colors.append("black")
+
+ 
+
+output_notebook()
+
+ 
+
+p = figure(title="Average Charges", toolbar_location="left",
+
+    plot_width=1100, plot_height=700)
+
+ 
+
+p.patches(state_xs, state_ys, fill_color=state_colors, fill_alpha=0.7,
+
+    line_color="black", line_width=2)
+
+ 
+
+
+
+show(p)
+
+
+
